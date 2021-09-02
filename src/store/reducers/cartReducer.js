@@ -1,0 +1,37 @@
+import { ADD_TO_CART, REMOVE_FROM_CART } from "../actions/cartActions";
+import { cartItems } from "../initialValues/cartItems";
+//varolan durumlar 
+const initialState = {
+    cartItems: cartItems
+}
+//bir varolan durumu gönderiyoruz bir de aksiyonları
+export function cartReducer(state = initialState, { type, payload }) {
+    switch (type) {
+        case ADD_TO_CART:
+            //
+            let product = state.cartItems.find(c => c.product.id === payload.id)
+            if (product) {
+                product.quantity++;
+                return {
+                    ...state   //spread ile objeyi ayırdık
+                }
+            }
+            else 
+            {
+                return {
+                    ...state,
+                    cartItems:[...state.cartItems,{quantity:1,product:payload}]
+                }
+            }
+        case REMOVE_FROM_CART:
+            return {
+                ...state,
+                cartItems:state.cartItems.filter(c=>c.product.id!==payload.id)
+
+            }
+
+        default:
+            return state;
+            
+    }
+}
